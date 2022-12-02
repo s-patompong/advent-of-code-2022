@@ -1,5 +1,5 @@
-# How to run
----
+# Usage Instructions
+
 Clone this repo to your machine:
 ```shell
 $ git clone https://github.com/s-patompong/advent-of-code-2022.git
