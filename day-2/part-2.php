@@ -34,12 +34,16 @@ while (($line = fgets($file)) !== false) {
 
     $score = 0;
 
-    // I need to end in a draw
     if ($myAction === 'X') {
+        // X means I need to lose, so I need to play the 'lose' side of the winCriteria array
         $score += $winCriteria[$opponentPlays];
     } else if ($myAction === 'Y') {
+        // Y means I need to draw, I need to play whatever the opponent is playing, I also get
+        // the extra score from the DRAW_SCORE
         $score += $opponentPlays + DRAW_SCORE;
     } else {
+        // Z means I need to win, I need to play the 'win' side of the winCriteria, which is basically
+        // the array value with the opponent turn as key once we flipped the winCriteria array
         $score += $loseCriteria[$opponentPlays] + WIN_SCORE;
     }
 
