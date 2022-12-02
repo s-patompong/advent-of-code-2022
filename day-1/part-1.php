@@ -15,7 +15,3 @@ foreach ($chunks as $chunk) {
 }
 
 echo $max . "\n";
-
-
-
-

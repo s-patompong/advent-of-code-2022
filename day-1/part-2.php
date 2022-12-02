@@ -13,6 +13,3 @@ foreach ($chunks as $chunk) {
 rsort($sums);
 
 echo ($sums[0] + $sums[1] + $sums[2]) . "\n";
-
-
-
