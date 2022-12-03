@@ -1,7 +1,9 @@
 <?php
 
-class Day3Part1
+class Day3Part2
 {
+    const INPUT_FILE_NAME = 'input.txt';
+
     private array $charCounts = [];
 
     public function __construct()
@@ -35,7 +37,7 @@ class Day3Part1
     public function solve(): void
     {
         $sum = 0;
-        $file = fopen(__DIR__ . '/input.txt', 'r');
+        $file = fopen(__DIR__ . '/' . self::INPUT_FILE_NAME, 'r');
 
         $groupCount = 0;
         $currentGroup = [];
@@ -87,6 +89,6 @@ class Day3Part1
     }
 }
 
-$problem = new Day3Part1();
+$problem = new Day3Part2();
 $problem->solve();
 
