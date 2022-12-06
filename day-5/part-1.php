@@ -57,7 +57,7 @@ class Day5Part1
             if (empty($line)) {
                 continue;
             }
-            
+
             preg_match(self::STACK_OPERATION_REGEX, $line, $matches, PREG_OFFSET_CAPTURE);
 
             $moveAmount = $matches['move_amount'][0];
@@ -73,14 +73,15 @@ class Day5Part1
     private function printOutput(): void
     {
         $keys = array_keys($this->stacks);
-        
+
         sort($keys);
-        
+
         echo "Message: ";
-        
+
         foreach ($keys as $key) {
             echo $this->stacks[$key][count($this->stacks[$key]) - 1];
         }
+
         echo "\n";
     }
 }

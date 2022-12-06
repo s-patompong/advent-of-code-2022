@@ -69,9 +69,9 @@ class Day5Part2
             for ($i = 1; $i <= $moveAmount; $i++) {
                 $temp[] = array_pop($this->stacks[$fromStack]);
             }
-            
+
             $temp = array_reverse($temp);
-            
+
             foreach ($temp as $crate) {
                 $this->stacks[$toStack][] = $crate;
             }
@@ -89,6 +89,7 @@ class Day5Part2
         foreach ($keys as $key) {
             echo $this->stacks[$key][count($this->stacks[$key]) - 1];
         }
+
         echo "\n";
     }
 }
