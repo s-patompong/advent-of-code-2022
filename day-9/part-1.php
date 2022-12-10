@@ -12,11 +12,19 @@ class Day9Part1
         '0,0' => true,
     ];
 
-    private array $currentHeadCoordinate = [0, 0];
+    private array $knotCoordinates = [
+        [0, 0], // Head
+        [0, 0], // 1
+    ];
 
-    private array $currentTailCoordinate = [0, 0];
+    private int $headIndex = 0;
 
-    private array $previousHeadCoordinate = [0, 0];
+    private int $tailIndex;
+
+    public function __construct()
+    {
+        $this->tailIndex = count($this->knotCoordinates) - 1;
+    }
 
     public function solve(): void
     {
@@ -28,64 +36,58 @@ class Day9Part1
             [$direction, $times] = explode(' ', $line);
 
             foreach (range(1, $times) as $time) {
-                $this->previousHeadCoordinate = $this->currentHeadCoordinate;
-
                 if ($direction === 'U') {
-                    $this->currentHeadCoordinate[self::AXIS_Y]++;
+                    $this->knotCoordinates[$this->headIndex][self::AXIS_Y]++;
                 } elseif ($direction === 'R') {
-                    $this->currentHeadCoordinate[self::AXIS_X]++;
+                    $this->knotCoordinates[$this->headIndex][self::AXIS_X]++;
                 } elseif ($direction === 'D') {
-                    $this->currentHeadCoordinate[self::AXIS_Y]--;
+                    $this->knotCoordinates[$this->headIndex][self::AXIS_Y]--;
                 } elseif ($direction === 'L') {
-                    $this->currentHeadCoordinate[self::AXIS_X]--;
+                    $this->knotCoordinates[$this->headIndex][self::AXIS_X]--;
                 }
 
-                $this->moveTailToFollowHead();
+                $this->moveKnotsToHead();
             }
         }
 
         echo "Tail visited count: " . count($this->tailVisitedCoordinates) . "\n";
     }
 
-    private function moveTailToFollowHead(): void
+    private function moveKnotsToHead(): void
     {
-        $tailDiagonalCoordinates = $this->getDiagonalCoordinates($this->currentTailCoordinate);
+        $knotsCount = count($this->knotCoordinates);
 
-        $headCoordinateString = $this->coordinateArrayToString($this->currentHeadCoordinate);
+        for ($i = 1; $i < $knotsCount; $i++) {
+            $currentKnotCoordinate = $this->knotCoordinates[$i];
+            $previousKnotCoordinate = $this->knotCoordinates[$i - 1];
 
-        // No need to move tail if it's already diagonal to head
-        if (array_key_exists($headCoordinateString, $tailDiagonalCoordinates)) {
-            return;
+            $distance = $this->getCoordinateDistance(
+                $currentKnotCoordinate[self::AXIS_X],
+                $currentKnotCoordinate[self::AXIS_Y],
+                $previousKnotCoordinate[self::AXIS_X],
+                $previousKnotCoordinate[self::AXIS_Y],
+            );
+
+            if ($distance < 2) {
+                continue;
+            }
+
+            $diffX = $previousKnotCoordinate[self::AXIS_X] - $currentKnotCoordinate[self::AXIS_X];
+            $diffY = $previousKnotCoordinate[self::AXIS_Y] - $currentKnotCoordinate[self::AXIS_Y];
+
+            $this->knotCoordinates[$i][self::AXIS_X] += gmp_sign($diffX);
+            $this->knotCoordinates[$i][self::AXIS_Y] += gmp_sign($diffY);
         }
 
-        // Move tail to previous head coordinate if they're now not diagonal to each other
-        $this->currentTailCoordinate = $this->previousHeadCoordinate;
-
-        $tailCoordinateString = $this->coordinateArrayToString($this->currentTailCoordinate);
+        // Keep track of the last tail coordination
+        $tailCoordinateString = $this->coordinateArrayToString($this->knotCoordinates[$this->tailIndex]);
 
         $this->tailVisitedCoordinates[$tailCoordinateString] = true;
     }
 
-    private function getDiagonalCoordinates(array $centerCoordinate): array
+    private function getCoordinateDistance(int $x1, int $y1, int $x2, int $y2): float
     {
-        return [
-            // The current coordinate
-            $this->coordinateArrayToString($centerCoordinate) => true,
-
-            // The row above the current coordinate
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X] - 1, $centerCoordinate[self::AXIS_Y] + 1]) => true,
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X], $centerCoordinate[self::AXIS_Y] + 1]) => true,
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X] + 1, $centerCoordinate[self::AXIS_Y] + 1]) => true,
-
-            // The current coordinate row
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X] - 1, $centerCoordinate[self::AXIS_Y]]) => true,
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X] + 1, $centerCoordinate[self::AXIS_Y]]) => true,
-
-            // The row below the current coordinate
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X] - 1, $centerCoordinate[self::AXIS_Y] - 1]) => true,
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X], $centerCoordinate[self::AXIS_Y] - 1]) => true,
-            $this->coordinateArrayToString([$centerCoordinate[self::AXIS_X] + 1, $centerCoordinate[self::AXIS_Y] - 1]) => true,
-        ];
+        return sqrt((($x2 - $x1) ** 2) + (($y2 - $y1) ** 2));
     }
 
     private function coordinateArrayToString(array $coordinate): string
