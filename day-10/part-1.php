@@ -6,12 +6,6 @@ class Day10Part1
 
     const INSTRUCTION_NOOP = 'noop';
 
-    const INSTRUCTION_ADD_X = 'addx';
-
-    const CYCLE_NOOP = 1;
-
-    const CYCLE_ADD_X = 2;
-
     private array $processedCycles = [[
         'initialized' => 1,
         'executed' => 1,
@@ -38,7 +32,7 @@ class Day10Part1
             }
 
             // For now, we'll just ignore the instruction
-            [$instruction, $value] = explode(' ', $line);
+            [, $value] = explode(' ', $line);
 
             $this->processedCycles[] = [
                 'initialized' => $x,
