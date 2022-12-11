@@ -1,0 +1,17 @@
+{
+    "name": "pond/day-11",
+    "autoload": {
+        "psr-4": {
+            "Pond\\Day11\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pond",
+            "email": "pond@trailercentral.com"
+        }
+    ],
+    "require": {
+        "brick/math": "^0.10.2"
+    }
+}
