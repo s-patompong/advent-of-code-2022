@@ -46,10 +46,19 @@ class DirectoryTraversal
 
     public int $sum = 0;
 
-    public function sumDirWithSizeAtMost10000(DirectoryNode $directory): int
+    public function sumDirWithSizeAtMost100_000(DirectoryNode $directory): int
     {
-        $fileSize = array_reduce($directory->files, fn(int $carry, File $file) => $carry + $file->size, 0);
-        $directoriesSize = array_reduce($directory->directories, fn(int $carry, DirectoryNode $dir) => $carry + $this->sumDirWithSizeAtMost10000($dir), 0);
+        $fileSize = array_reduce(
+            $directory->files,
+            fn(int $carry, File $file) => $carry + $file->size,
+            0
+        );
+
+        $directoriesSize = array_reduce(
+            $directory->directories,
+            fn(int $carry, DirectoryNode $dir) => $carry + $this->sumDirWithSizeAtMost100_000($dir),
+            0
+        );
 
         $size = $fileSize + $directoriesSize;
 
@@ -91,7 +100,7 @@ class Day7Part1
         }
 
         $traversal = new DirectoryTraversal();
-        $traversal->sumDirWithSizeAtMost10000($this->directories['/']);
+        $traversal->sumDirWithSizeAtMost100_000($this->directories['/']);
 
         echo "Answer: $traversal->sum\n";
     }
